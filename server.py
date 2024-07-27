@@ -9,20 +9,25 @@ app = Flask(__name__)
 
 @app.route("/emotionDetector", methods = ['GET'])
 def sent_detection():
+    """
+    Esta función maneja las solicitudes GET a la ruta /emotionDetector, toma el texto
+    para analizar de los argumentos de la solicitud, y devuelve una respuesta formateada
+    con las emociones detectadas y la emoción dominante.
+    """
     text_to_analyze = request.args.get('textToAnalyze')
-    if text_to_analyze and text_to_analyze.strip():
-        response = emotion_detector(text_to_analyze)
-        formatted_response = (
-            f"For the given statement, the system response is 'anger': {response['anger']}, "
-            f"'disgust': {response['disgust']}, 'fear': {response['fear']}, 'joy': {response['joy']} "
-            f"and 'sadness': {response['sadness']}. The dominant emotion is {response['dominant_emotion']}."
-        )
-        return formatted_response
-    else:
+    if not text_to_analyze or not text_to_analyze.strip():
         return "Invalid text! Please try again!", 400
-    
+    response = emotion_detector(text_to_analyze)
+    formatted_response = (
+    f"For the given statement, the system response is 'anger': {response['anger']}, "
+    f"'disgust': {response['disgust']}, 'fear': {response['fear']}, 'joy': {response['joy']} "
+    f"and 'sadness': {response['sadness']}. The dominant emotion is {response['dominant_emotion']}."
+)
+    return formatted_response
+
 @app.route("/")
 def render_index_page():
+    """Esta función devuelve la página de inicio."""
     return render_template("index.html")
 
 if __name__ == '__main__':
